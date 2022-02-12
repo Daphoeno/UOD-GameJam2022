@@ -6,6 +6,18 @@
 #include "Components/ActorComponent.h"
 #include "AmbientMotionComponent.generated.h"
 
+USTRUCT(BlueprintType)
+struct FRotationAxis {
+
+	GENERATED_BODY()
+
+	bool RotateOnX = true;
+
+	bool RotateOnY = true;
+
+	bool RotateOnZ = false;
+
+};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GAMEJAM2022_API UAmbientMotionComponent : public UActorComponent
@@ -14,6 +26,14 @@ class GAMEJAM2022_API UAmbientMotionComponent : public UActorComponent
 
 private:
 
+	USceneComponent* MeshPivot;
+
+	float MaxRotationRate = 15.f;
+	float RotationRate;
+
+	FRotationAxis RotationalAxis;
+
+	void UpdateRotation();
 
 protected:
 	// Called when the game starts
@@ -25,6 +45,9 @@ public:
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable)
+		void SetMeshPivot(USceneComponent* NewPivot) { MeshPivot = NewPivot; }
 
 		
 };

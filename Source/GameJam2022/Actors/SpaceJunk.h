@@ -7,6 +7,9 @@
 #include "SpaceJunk.generated.h"
 
 class UCapsuleComponent;
+class UMaterialInstanceDynamic;
+
+class UAmbientMotionComponent;
 
 UCLASS()
 class GAMEJAM2022_API ASpaceJunk : public AActor
@@ -27,8 +30,20 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "True"))
 		UCapsuleComponent* CollectionTrigger;
 
-	float GravityRange = 1000.f;
-	float GravtyStrength = 1.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "True"))
+		UAmbientMotionComponent* AmbientMotion;
+
+	// ...
+
+	UMaterialInstanceDynamic* DynamicMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gravity", meta = (AllowPrivateAccess = "True"))
+		float GravityRange = 1500.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gravity", meta = (AllowPrivateAccess = "True"))
+		float GravtyStrength = 2.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gravity", meta = (AllowPrivateAccess = "True"))
+		int ObjectScale = 1;
 
 	void UpdatePosition();
 

@@ -21,6 +21,7 @@ void UAmbientMotionComponent::BeginPlay()
 
 	// ...
 	
+	RotationRate = FMath::RandRange(MaxRotationRate * 0.1f, MaxRotationRate);
 }
 
 
@@ -30,5 +31,35 @@ void UAmbientMotionComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+
+	if (MeshPivot)
+	{
+		UpdateRotation();
+	}
+}
+
+void UAmbientMotionComponent::UpdateRotation()
+{
+	if (!MeshPivot) { return; }
+
+	FRotator CurrentRotation = MeshPivot->GetRelativeRotation();
+	FRotator NewRotation = CurrentRotation;
+
+	if (RotationalAxis.RotateOnX)
+	{
+		NewRotation += FRotator(0.f, 0.f, RotationRate * GetWorld()->DeltaTimeSeconds);
+	}
+
+	if (RotationalAxis.RotateOnY)
+	{
+		NewRotation += FRotator(RotationRate * GetWorld()->DeltaTimeSeconds, 0.f, 0.f);
+	}
+
+	if (RotationalAxis.RotateOnZ)
+	{
+		NewRotation += FRotator(0.f, RotationRate * GetWorld()->DeltaTimeSeconds, 0.f);
+	}
+
+	MeshPivot->SetRelativeRotation(NewRotation);
 }
 
