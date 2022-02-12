@@ -33,6 +33,9 @@ private:
 
 	void UpdateCameraPosition();
 
+	float DefaultScale;
+	void IncreaseScale(int NewObjectScale);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -51,5 +54,7 @@ public:
 
 	void MoveForward(float value);
 	void MoveRight(float value);
+
+	float GetObjectScale() const { return ObjectScale; }
 
 };

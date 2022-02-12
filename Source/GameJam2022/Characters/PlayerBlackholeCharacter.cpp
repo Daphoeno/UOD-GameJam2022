@@ -45,7 +45,7 @@ void APlayerBlackholeCharacter::BeginPlay()
 	
 	// ...
 
-
+	DefaultScale = BlackholeMesh->GetRelativeScale3D().Size();
 }
 
 void APlayerBlackholeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -89,4 +89,11 @@ void APlayerBlackholeCharacter::UpdateCameraPosition()
 
 	// Lerp springarm
 	SpringArm->SetWorldLocation(FMath::Lerp(CurrentPosition, TargetPosition, CameraFollowSpeed * GetWorld()->GetDeltaSeconds()));
+}
+
+void APlayerBlackholeCharacter::IncreaseScale(int NewObjectScale)
+{
+	ObjectScale += (NewObjectScale * .1f);
+
+	BlackholeMesh->SetRelativeScale3D(FVector((FVector::OneVector * DefaultScale) + ((ObjectScale - 1) * 0.1f)));
 }
