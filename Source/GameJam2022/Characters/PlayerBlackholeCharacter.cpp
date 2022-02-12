@@ -28,10 +28,11 @@ APlayerBlackholeCharacter::APlayerBlackholeCharacter()
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->SetRelativeRotation(FRotator(-75.f, 0.f, 0.f));
 	SpringArm->bDoCollisionTest = false;
-	SpringArm->TargetArmLength = 2000.f;
+	SpringArm->TargetArmLength = 5000.f;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+	Camera->SetFieldOfView(35.f);
 
 	
 }

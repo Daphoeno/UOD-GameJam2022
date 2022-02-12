@@ -29,6 +29,7 @@ private:
 	float CameraFollowAmount = 0.3f;
 	float CameraFollowSpeed = 4.f;
 
+
 	void UpdateCameraPosition();
 
 protected:
