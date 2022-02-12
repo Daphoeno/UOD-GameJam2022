@@ -16,14 +16,21 @@ class GAMEJAM2022_API ASpaceJunk : public AActor
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "True"))
+		USceneComponent* RootPivot;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "True"))
+		USceneComponent* MeshPivot;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "True"))
 		UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "True"))
 		UCapsuleComponent* CollectionTrigger;
 
 	float GravityRange = 1000.f;
-	float GravtyStrength = 0.f;
+	float GravtyStrength = 1.f;
 
+	void UpdatePosition();
 
 protected:
 	// Called when the game starts or when spawned
