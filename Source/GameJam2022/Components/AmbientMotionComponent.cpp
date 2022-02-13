@@ -35,17 +35,17 @@ void UAmbientMotionComponent::ResetRotation()
 
 	if (RotationalAxis.RotateOnX)
 	{
-		NewRotation += FRotator(0.f, 0.f, FMath::RandRange(0.f, 360.f));
+		NewRotation += FRotator(0.f, 0.f, FMath::RandRange(-90.f, 90.f));
 	}
 
 	if (RotationalAxis.RotateOnY)
 	{
-		NewRotation += FRotator(FMath::RandRange(0.f, 360.f), 0.f, 0.f);
+		NewRotation += FRotator(FMath::RandRange(-90.f, 90.f), 0.f, 0.f);
 	}
 
 	if (RotationalAxis.RotateOnZ)
 	{
-		NewRotation += FRotator(0.f, FMath::RandRange(0.f, 360.f), 0.f);
+		NewRotation += FRotator(0.f, FMath::RandRange(-90.f, 90.f), 0.f);
 	}
 
 	MeshPivot->SetRelativeRotation(NewRotation);
