@@ -50,7 +50,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnDeath();
 
 	void MoveForward(float value);
 	void MoveRight(float value);
