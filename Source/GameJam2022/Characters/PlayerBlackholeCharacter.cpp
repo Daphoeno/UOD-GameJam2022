@@ -97,3 +97,12 @@ void APlayerBlackholeCharacter::IncreaseScale(int NewObjectScale)
 
 	BlackholeMesh->SetRelativeScale3D(FVector((FVector::OneVector * DefaultScale) + ((ObjectScale - 1) * 0.1f)));
 }
+
+void APlayerBlackholeCharacter::HandleCollection(ASpaceJunk* CollectedActor)
+{
+	if (!CollectedActor) { return; }
+
+	// ...
+
+
+}

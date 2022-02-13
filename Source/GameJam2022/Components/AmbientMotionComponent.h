@@ -47,7 +47,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-		void SetMeshPivot(USceneComponent* NewPivot) { MeshPivot = NewPivot; }
+		void SetMeshPivot(USceneComponent* NewPivot) { MeshPivot = NewPivot; ResetRotation();  }
 
+	UFUNCTION(BLueprintCallable)
+		void ResetRotation();
 		
 };

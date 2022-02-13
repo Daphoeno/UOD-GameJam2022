@@ -29,7 +29,7 @@ private:
 	float CameraFollowAmount = 0.3f;
 	float CameraFollowSpeed = 4.f;
 
-	float ObjectScale = 1.f;
+	float ObjectScale = 1.5f;
 
 	void UpdateCameraPosition();
 
@@ -56,5 +56,8 @@ public:
 	void MoveRight(float value);
 
 	float GetObjectScale() const { return ObjectScale; }
+
+	UFUNCTION(BlueprintCallable)
+		void HandleCollection(ASpaceJunk* CollectedActor);
 
 };
