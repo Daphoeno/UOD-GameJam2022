@@ -17,7 +17,6 @@ ASpawnManager::ASpawnManager()
 
 	// ...
 
-
 }
 
 // Called when the game starts or when spawned
@@ -58,4 +57,21 @@ bool ASpawnManager::HandleRespawn(ASpaceJunk* RespawnActor)
 	// ...
 
 	return true;
+}
+
+void ASpawnManager::GetNewTravelDirection(ASpaceJunk* Actor)
+{
+	if (!Actor) { return; }
+
+	// ...
+
+	if (TravelMarkers.Num() <= 0) {
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATravelMarker::StaticClass(), TravelMarkers);
+	}
+
+	AActor* SelectedTravelMarker = TravelMarkers[FMath::RandRange(0, TravelMarkers.Num() - 1)];
+
+	if (!SelectedTravelMarker) { return; }
+
+	Actor->SetTravelPath(SelectedTravelMarker->GetActorLocation());
 }

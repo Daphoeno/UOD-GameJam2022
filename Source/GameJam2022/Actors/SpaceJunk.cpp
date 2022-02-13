@@ -53,7 +53,19 @@ ASpaceJunk::ASpaceJunk()
 		Scale01.Add(AmongusAsset.Object);
 	}
 
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> R2Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_R2D2.SM_R2D2'"));
+	if (R2Asset.Succeeded())
+	{
+		Scale01.Add(R2Asset.Object);
+	}
+
 	//Scale 02
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TardisAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Tardis.SM_Tardis'"));
+	if (TardisAsset.Succeeded())
+	{
+		Scale02.Add(TardisAsset.Object);
+	}
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Satellite01Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_sattelite1.SM_sattelite1'"));
 	if (Satellite01Asset.Succeeded())
@@ -67,6 +79,12 @@ ASpaceJunk::ASpaceJunk()
 		Scale02.Add(Satellite02Asset.Object);
 	}
 
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> UFOAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_ufo.SM_ufo'"));
+	if (UFOAsset.Succeeded())
+	{
+		Scale02.Add(UFOAsset.Object);
+	}
+
 	//Scale03
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Satellite03Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_sattelite3.SM_sattelite3'"));
@@ -74,6 +92,19 @@ ASpaceJunk::ASpaceJunk()
 	{
 		Scale03.Add(Satellite03Asset.Object);
 	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Asteroid01Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_sattelite3.SM_sattelite3'"));
+	if (Asteroid01Asset.Succeeded())
+	{
+		Scale03.Add(Asteroid01Asset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Asteroid02Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_sattelite3.SM_sattelite3'"));
+	if (Asteroid02Asset.Succeeded())
+	{
+		Scale03.Add(Asteroid02Asset.Object);
+	}
+
 
 	//Scale04
 
@@ -84,6 +115,12 @@ ASpaceJunk::ASpaceJunk()
 	}
 
 	//Scale05
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> StarDestroyerAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Star_Destroyer.SM_Star_Destroyer'"));
+	if (StarDestroyerAsset.Succeeded())
+	{
+		Scale05.Add(StarDestroyerAsset.Object);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -100,13 +137,6 @@ void ASpaceJunk::BeginPlay()
 
 	SetupObjectScale();
 
-	UMaterialInstanceDynamic* MeshMaterial = Mesh->CreateDynamicMaterialInstance(0);
-	if (MeshMaterial)
-	{
-		DynamicMaterial = MeshMaterial;
-		Mesh->SetMaterial(0, DynamicMaterial);
-	}
-
 	// ...
 
 	if (MeshPivot && AmbientMotion)
@@ -114,40 +144,83 @@ void ASpaceJunk::BeginPlay()
 		AmbientMotion->SetMeshPivot(MeshPivot);
 	}
 
+	// ...
+
+	if (ASpawnManager* SM = Cast<ASpawnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ASpawnManager::StaticClass())))
+	{
+		SM->GetNewTravelDirection(this);
+	}
 }
 
 void ASpaceJunk::SetupObjectScale()
 {
-	ObjectScale = FMath::RandRange(1,4);
-
-	// ...
-
-	switch (INT(ObjectScale))
+	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerBlackholeCharacter::StaticClass())))
 	{
-	case 1:
-		Mesh->SetStaticMesh(Scale01[FMath::RandRange(0, Scale01.Num() - 1)]);
+		ObjectScale = FMath::RandRange(FMath::Clamp(INT(PC->GetObjectScale()) - 3, 1, 10), INT(PC->GetObjectScale()) + 3);
 
-		break;
-	case 2:
-		Mesh->SetStaticMesh(Scale02[FMath::RandRange(0, Scale02.Num() - 1)]);
+		// ...
 
-		break;
-	case 3:
-		Mesh->SetStaticMesh(Scale03[FMath::RandRange(0, Scale03.Num() - 1)]);
+		UStaticMesh* TempMesh;
+		UMaterialInstance* TempMaterial;
 
-		break;
-	case 4:
-		Mesh->SetStaticMesh(Scale04[FMath::RandRange(0, Scale04.Num() - 1)]);
+		switch (INT(ObjectScale))
+		{
+		case 1:
+			TempMesh = Scale01[FMath::RandRange(0, Scale01.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
 
-		break;
-	default:
+			break;
+		case 2:
+			TempMesh = Scale02[FMath::RandRange(0, Scale02.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
 
-		break;
+			break;
+		case 3:
+			TempMesh = Scale03[FMath::RandRange(0, Scale03.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
+
+			break;
+		case 4:
+			TempMesh = Scale04[FMath::RandRange(0, Scale04.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
+
+			break;
+		case 5:
+			TempMesh = Scale05[FMath::RandRange(0, Scale05.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
+
+			break;
+		default:
+
+			break;
+		}
+
+		// ...
+
+
+		// ...
+
+		UMaterialInstanceDynamic* MeshMaterial = Mesh->CreateDynamicMaterialInstance(0);
+		if (MeshMaterial)
+		{
+			DynamicMaterial = MeshMaterial;
+			Mesh->SetMaterial(0, DynamicMaterial);
+		}
+
+		// ...
+
+		SetActorScale3D(FVector::OneVector * ObjectScale * .75f);
 	}
-
-	// ...
-
-	SetActorScale3D(FVector::OneVector * ObjectScale * .75f);
 }
 
 // Called every frame
@@ -163,13 +236,12 @@ void ASpaceJunk::Tick(float DeltaTime)
 
 	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 	{
-		SetActorScale3D((FVector::OneVector * ObjectScale * .75f) / FMath::Clamp(PC->GetObjectScale() - 1, 1.f, 100.f));
+		SetActorScale3D((FVector::OneVector * ObjectScale * .6f) - (FVector::OneVector * ((PC->GetObjectScale() - 1.5f) * 0.1f)));
 
 		// ...
 
 		if (DynamicMaterial)
 		{
-
 			if (ObjectScale > PC->GetObjectScale())
 			{
 				DynamicMaterial->SetVectorParameterValue("FlashColor", FVector(1.0f, 0.f, 0.f));
@@ -184,6 +256,11 @@ void ASpaceJunk::Tick(float DeltaTime)
 
 void ASpaceJunk::UpdatePosition()
 {
+	FVector CurrentLocation = GetActorLocation();
+	FVector TargetLocation = CurrentLocation += ((TravelDirection / ObjectScale)* 2.f * GetWorld()->DeltaTimeSeconds);
+
+	SetActorLocation(TargetLocation);
+
 	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 	{
 		float PlayerDistance = FMath::Abs(FVector::Dist(PC->GetActorLocation(), GetActorLocation()));
@@ -193,13 +270,13 @@ void ASpaceJunk::UpdatePosition()
 
 		// ...
 
-		FVector CurrentLocation = GetActorLocation();
+		CurrentLocation = GetActorLocation();
 
 		float GravityRatio = 1 - (PlayerDistance / GravityRange);
 
 		if (PlayerDistance < GravityRange / 4)
 		{
-			GravityRatio += 32 * (1 - (PlayerDistance / (GravityRange / 4)));
+			GravityRatio += 16 * (1 - (PlayerDistance / (GravityRange / 4)));
 		}
 		else if (PlayerDistance < GravityRange / 2)
 		{
@@ -213,9 +290,9 @@ void ASpaceJunk::UpdatePosition()
 			GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Cyan, DebugMessage);
 		}
 
-		FVector TargetLocation = GetActorLocation() + (PlayerDirection);
+		TargetLocation = (GetActorLocation() + (PlayerDirection));
 
-		float GravityScaleFactor = (ObjectScale - PC->GetObjectScale()) + 1.f;
+		float GravityScaleFactor = FMath::Clamp((ObjectScale - PC->GetObjectScale()), 0.f, 10.f) + 1.f;
 
 		FVector LerpLocation = FMath::Lerp(CurrentLocation, TargetLocation, (GravtyStrength / GravityScaleFactor) * GravityRatio * GetWorld()->GetDeltaSeconds());
 
@@ -242,6 +319,13 @@ void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 			if (ASpawnManager* SpawnManager = Cast<ASpawnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ASpawnManager::StaticClass())))
 			{
 				SpawnManager->HandleRespawn(this);
+
+				SetupObjectScale();
+
+				if (AmbientMotion)
+				{
+					AmbientMotion->ResetRotation();
+				}
 			}
 		}
 	}
@@ -249,5 +333,16 @@ void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 
 void ASpaceJunk::SetTravelPath(FVector WaypointDirection)
 {
+	TravelDirection = FVector(FVector(WaypointDirection - GetActorLocation()) * FVector(1.f, 1.f, 0.f)).GetClampedToSize(100.f, 100.f);
 
+	if (GEngine)
+	{
+		FString DebugMessage = TEXT("New Travel Direction = ");
+		DebugMessage.AppendInt(INT(TravelDirection.X));
+		DebugMessage.Append(TEXT(", "));
+		DebugMessage.AppendInt(INT(TravelDirection.Y));
+		DebugMessage.Append(TEXT(", "));
+		DebugMessage.AppendInt(INT(TravelDirection.Z));
+		GEngine->AddOnScreenDebugMessage(-1, 4.f, FColor::Yellow, DebugMessage);
+	}
 }

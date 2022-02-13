@@ -29,7 +29,7 @@ private:
 	float CameraFollowAmount = 0.3f;
 	float CameraFollowSpeed = 4.f;
 
-	float ObjectScale = 1.5f;
+	float ObjectScale = 1.8f;
 
 	void UpdateCameraPosition();
 

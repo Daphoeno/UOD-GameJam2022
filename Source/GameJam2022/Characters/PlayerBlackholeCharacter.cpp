@@ -3,6 +3,8 @@
 
 #include "PlayerBlackholeCharacter.h"
 
+#include "GameJam2022/Actors/SpaceJunk.h"
+
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -46,6 +48,8 @@ void APlayerBlackholeCharacter::BeginPlay()
 	// ...
 
 	DefaultScale = BlackholeMesh->GetRelativeScale3D().Size();
+
+	BlackholeMesh->SetRelativeScale3D((FVector::OneVector * DefaultScale) + (FVector::OneVector * ((ObjectScale - 1.5f) * 0.05f)));
 }
 
 void APlayerBlackholeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -93,9 +97,18 @@ void APlayerBlackholeCharacter::UpdateCameraPosition()
 
 void APlayerBlackholeCharacter::IncreaseScale(int NewObjectScale)
 {
-	ObjectScale += (NewObjectScale * .1f);
+	ObjectScale += (.08f);
 
-	BlackholeMesh->SetRelativeScale3D(FVector((FVector::OneVector * DefaultScale) + ((ObjectScale - 1) * 0.1f)));
+#if WITH_EDITOR
+	if (GEngine)
+	{
+		FString DebugMessage = TEXT("New Player Size = ");
+		DebugMessage.Append(FString::SanitizeFloat(ObjectScale));
+		GEngine->AddOnScreenDebugMessage(-1, 4.f, FColor::Green, DebugMessage);
+	}
+#endif
+
+	BlackholeMesh->SetRelativeScale3D((FVector::OneVector * DefaultScale) + (FVector::OneVector * ((ObjectScale - 1.5f) * 0.1f)));
 }
 
 void APlayerBlackholeCharacter::HandleCollection(ASpaceJunk* CollectedActor)
@@ -104,5 +117,5 @@ void APlayerBlackholeCharacter::HandleCollection(ASpaceJunk* CollectedActor)
 
 	// ...
 
-
+	IncreaseScale(CollectedActor->GetObjectScale());
 }

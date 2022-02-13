@@ -41,6 +41,7 @@ private:
 	TArray<UStaticMesh*> Scale02;
 	TArray<UStaticMesh*> Scale03;
 	TArray<UStaticMesh*> Scale04;
+	TArray<UStaticMesh*> Scale05;
 
 	void SetupObjectScale();
 
@@ -54,9 +55,11 @@ private:
 		float GravtyStrength = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gravity", meta = (AllowPrivateAccess = "True"))
-		float ObjectScale = 1.f;
+		int ObjectScale = 1;
 
 	void UpdatePosition();
+
+	FVector TravelDirection;
 
 protected:
 	// Called when the game starts or when spawned
@@ -78,4 +81,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetTravelPath(FVector WaypointDirection);
 
+	UFUNCTION(BlueprintCallable)
+		int GetObjectScale() const { return ObjectScale; }
 };
