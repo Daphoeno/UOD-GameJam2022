@@ -354,6 +354,7 @@ void ASpaceJunk::UpdatePosition()
 			DebugMessage.Append(FString::SanitizeFloat(GravityRatio));
 			GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Cyan, DebugMessage);
 		}
+#endif
 
 		TargetLocation = (GetActorLocation() + (PlayerDirection));
 
@@ -363,7 +364,6 @@ void ASpaceJunk::UpdatePosition()
 
 		SetActorLocation(FVector(LerpLocation.X, LerpLocation.Y, 0.f));
 	}
-#endif
 }
 
 void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
