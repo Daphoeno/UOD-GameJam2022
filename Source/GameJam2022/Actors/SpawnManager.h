@@ -32,4 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool HandleRespawn(ASpaceJunk* RespawnActor);
 
+	UFUNCTION(BlueprintCallable)
+		void GetNewTravelDirection(ASpaceJunk* Actor);
+
 };
