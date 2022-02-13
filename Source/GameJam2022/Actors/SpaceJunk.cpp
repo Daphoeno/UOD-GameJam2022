@@ -377,7 +377,7 @@ void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 
 	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(OtherActor))
 	{
-		if (PC->GetObjectScale() < ObjectScale) { PC->OnDeath(); return; }
+		if (PC->GetObjectScale() <= ObjectScale) { PC->OnDeath(); return; }
 
 		if (Cast<UCapsuleComponent>(OtherComp))
 		{
