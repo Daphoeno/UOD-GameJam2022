@@ -42,6 +42,8 @@ private:
 	TArray<UStaticMesh*> Scale03;
 	TArray<UStaticMesh*> Scale04;
 	TArray<UStaticMesh*> Scale05;
+	TArray<UStaticMesh*> Scale06;
+	TArray<UStaticMesh*> Scale07;
 
 	void SetupObjectScale();
 
@@ -56,6 +58,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gravity", meta = (AllowPrivateAccess = "True"))
 		int ObjectScale = 1;
+
+	float DistanceTravelled = 0.f;
 
 	void UpdatePosition();
 

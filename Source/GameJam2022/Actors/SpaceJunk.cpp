@@ -31,7 +31,7 @@ ASpaceJunk::ASpaceJunk()
 
 	CollectionTrigger = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Collection Trigger"));
 	CollectionTrigger->SetupAttachment(RootComponent);
-	CollectionTrigger->InitCapsuleSize(100.f, 100.f);
+	CollectionTrigger->InitCapsuleSize(50.f, 50.f);
 	CollectionTrigger->SetCollisionProfileName(TEXT("Trigger"));
 
 	MeshPivot = CreateDefaultSubobject<USceneComponent>(TEXT("Mesh Pivot"));
@@ -93,13 +93,13 @@ ASpaceJunk::ASpaceJunk()
 		Scale03.Add(Satellite03Asset.Object);
 	}
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Asteroid01Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_sattelite3.SM_sattelite3'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Asteroid01Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/asteroid_1_low.asteroid_1_low'"));
 	if (Asteroid01Asset.Succeeded())
 	{
 		Scale03.Add(Asteroid01Asset.Object);
 	}
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Asteroid02Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_sattelite3.SM_sattelite3'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Asteroid02Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/asteroid_2_low.asteroid_2_low'"));
 	if (Asteroid02Asset.Succeeded())
 	{
 		Scale03.Add(Asteroid02Asset.Object);
@@ -116,10 +116,30 @@ ASpaceJunk::ASpaceJunk()
 
 	//Scale05
 
+	if (Asteroid01Asset.Succeeded())
+	{
+		Scale05.Add(Asteroid01Asset.Object);
+	}
+
+	if (Asteroid02Asset.Succeeded())
+	{
+		Scale05.Add(Asteroid02Asset.Object);
+	}
+
+	//scale06
+	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> StarDestroyerAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Star_Destroyer.SM_Star_Destroyer'"));
 	if (StarDestroyerAsset.Succeeded())
 	{
-		Scale05.Add(StarDestroyerAsset.Object);
+		Scale06.Add(StarDestroyerAsset.Object);
+	}
+
+	//Scale07
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> DeathStarAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Death_Star.SM_Death_Star'"));
+	if (DeathStarAsset.Succeeded())
+	{
+		Scale07.Add(DeathStarAsset.Object);
 	}
 }
 
@@ -156,7 +176,7 @@ void ASpaceJunk::SetupObjectScale()
 {
 	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerBlackholeCharacter::StaticClass())))
 	{
-		ObjectScale = FMath::RandRange(FMath::Clamp(INT(PC->GetObjectScale()) - 3, 1, 10), INT(PC->GetObjectScale()) + 3);
+		ObjectScale = FMath::RandRange(FMath::Clamp(INT(PC->GetObjectScale()) - 4, 1, 10), INT(PC->GetObjectScale()) + 3);
 
 		// ...
 
@@ -200,6 +220,20 @@ void ASpaceJunk::SetupObjectScale()
 			Mesh->SetMaterial(0, TempMaterial);
 
 			break;
+		case 6:
+			TempMesh = Scale06[FMath::RandRange(0, Scale06.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
+
+			break;
+		case 7:
+			TempMesh = Scale07[FMath::RandRange(0, Scale07.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
+
+			break;
 		default:
 
 			break;
@@ -219,7 +253,8 @@ void ASpaceJunk::SetupObjectScale()
 
 		// ...
 
-		SetActorScale3D(FVector::OneVector * ObjectScale * .75f);
+		SetActorScale3D((FVector::OneVector * ObjectScale * .6f) - (FVector::OneVector * ((PC->GetObjectScale() - 1.5f) * 0.2f)));
+
 	}
 }
 
@@ -236,8 +271,6 @@ void ASpaceJunk::Tick(float DeltaTime)
 
 	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 	{
-		SetActorScale3D((FVector::OneVector * ObjectScale * .6f) - (FVector::OneVector * ((PC->GetObjectScale() - 1.5f) * 0.1f)));
-
 		// ...
 
 		if (DynamicMaterial)
@@ -257,7 +290,29 @@ void ASpaceJunk::Tick(float DeltaTime)
 void ASpaceJunk::UpdatePosition()
 {
 	FVector CurrentLocation = GetActorLocation();
-	FVector TargetLocation = CurrentLocation += ((TravelDirection / ObjectScale)* 2.f * GetWorld()->DeltaTimeSeconds);
+	FVector TargetLocation = CurrentLocation += ((TravelDirection / ObjectScale)* 4.f * GetWorld()->DeltaTimeSeconds);
+
+	DistanceTravelled += ((100.f / ObjectScale) * 4.f * GetWorld()->DeltaTimeSeconds);
+	if (DistanceTravelled > 6500.f)
+	{
+		if (ASpawnManager* SpawnManager = Cast<ASpawnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ASpawnManager::StaticClass())))
+		{
+			SpawnManager->HandleRespawn(this);
+
+			SetupObjectScale();
+
+			if (AmbientMotion)
+			{
+				AmbientMotion->ResetRotation();
+			}
+		}
+
+		DistanceTravelled = 0.f;
+
+		// ...
+
+		return;
+	}
 
 	SetActorLocation(TargetLocation);
 
@@ -281,6 +336,18 @@ void ASpaceJunk::UpdatePosition()
 		else if (PlayerDistance < GravityRange / 2)
 		{
 			GravityRatio += 4 * (1 - (PlayerDistance / (GravityRange / 2)));
+		}
+
+		if ((PlayerDistance < GravityRange / 6) && (ObjectScale <= PC->GetObjectScale()))
+		{
+			FVector CurrentScale = GetActorScale3D();
+			FVector TargetScale = FVector::OneVector * 0.5f;
+
+			SetActorScale3D(FMath::Lerp(CurrentScale, TargetScale, 4.f * GetWorld()->DeltaTimeSeconds));
+		}
+		else
+		{
+			SetActorScale3D((FVector::OneVector * ObjectScale * .6f) - (FVector::OneVector * ((PC->GetObjectScale() - 1.5f) * 0.2f)));
 		}
 
 		if (GEngine)
@@ -327,6 +394,9 @@ void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 					AmbientMotion->ResetRotation();
 				}
 			}
+
+			DistanceTravelled = 0.f;
+
 		}
 	}
 }

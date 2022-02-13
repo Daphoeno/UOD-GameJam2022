@@ -15,7 +15,7 @@ struct FRotationAxis {
 
 	bool RotateOnY = true;
 
-	bool RotateOnZ = true;
+	bool RotateOnZ = false;
 
 };
 
