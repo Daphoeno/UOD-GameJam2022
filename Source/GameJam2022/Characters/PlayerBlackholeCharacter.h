@@ -29,9 +29,12 @@ private:
 	float CameraFollowAmount = 0.3f;
 	float CameraFollowSpeed = 4.f;
 
-	float ObjectScale = 1.f;
+	float ObjectScale = 1.5f;
 
 	void UpdateCameraPosition();
+
+	float DefaultScale;
+	void IncreaseScale(int NewObjectScale);
 
 protected:
 	// Called when the game starts or when spawned
@@ -51,5 +54,10 @@ public:
 
 	void MoveForward(float value);
 	void MoveRight(float value);
+
+	float GetObjectScale() const { return ObjectScale; }
+
+	UFUNCTION(BlueprintCallable)
+		void HandleCollection(ASpaceJunk* CollectedActor);
 
 };
