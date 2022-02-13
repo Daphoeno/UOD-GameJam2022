@@ -44,6 +44,10 @@ private:
 	TArray<UStaticMesh*> Scale05;
 	TArray<UStaticMesh*> Scale06;
 	TArray<UStaticMesh*> Scale07;
+	TArray<UStaticMesh*> Scale08;
+	TArray<UStaticMesh*> Scale09;
+	TArray<UStaticMesh*> Scale10;
+
 
 	void SetupObjectScale();
 

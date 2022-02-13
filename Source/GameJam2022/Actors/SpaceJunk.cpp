@@ -59,6 +59,24 @@ ASpaceJunk::ASpaceJunk()
 		Scale01.Add(R2Asset.Object);
 	}
 
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ToiletAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_toilet.SM_toilet'"));
+	if (ToiletAsset.Succeeded())
+	{
+		Scale01.Add(ToiletAsset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>  SputnikAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Sputnik.SM_Sputnik'"));
+	if (SputnikAsset.Succeeded())
+	{
+		Scale01.Add(SputnikAsset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>  DogAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Dog.SM_Dog'"));
+	if (DogAsset.Succeeded())
+	{
+		Scale01.Add(DogAsset.Object);
+	}
+
 	//Scale 02
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TardisAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Tardis.SM_Tardis'"));
@@ -85,6 +103,12 @@ ASpaceJunk::ASpaceJunk()
 		Scale02.Add(UFOAsset.Object);
 	}
 
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TeslaAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/tesla_roadster_low.tesla_roadster_low'"));
+	if (TeslaAsset.Succeeded())
+	{
+		Scale02.Add(TeslaAsset.Object);
+	}
+
 	//Scale03
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Satellite03Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_sattelite3.SM_sattelite3'"));
@@ -105,6 +129,17 @@ ASpaceJunk::ASpaceJunk()
 		Scale03.Add(Asteroid02Asset.Object);
 	}
 
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Asteroid03Asset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/crystal_asteroid_low.crystal_asteroid_low'"));
+	if (Asteroid03Asset.Succeeded())
+	{
+		Scale03.Add(Asteroid03Asset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShuttleAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Space_Shuttle.SM_Space_Shuttle'"));
+	if (ShuttleAsset.Succeeded())
+	{
+		Scale03.Add(ShuttleAsset.Object);
+	}
 
 	//Scale04
 
@@ -126,6 +161,11 @@ ASpaceJunk::ASpaceJunk()
 		Scale05.Add(Asteroid02Asset.Object);
 	}
 
+	if (Asteroid03Asset.Succeeded())
+	{
+		Scale05.Add(Asteroid03Asset.Object);
+	}
+
 	//scale06
 	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> StarDestroyerAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Star_Destroyer.SM_Star_Destroyer'"));
@@ -140,6 +180,51 @@ ASpaceJunk::ASpaceJunk()
 	if (DeathStarAsset.Succeeded())
 	{
 		Scale07.Add(DeathStarAsset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MercuryAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Planets_Mercury.SM_Planets_Mercury'"));
+	if (MercuryAsset.Succeeded())
+	{
+		Scale07.Add(MercuryAsset.Object);
+	}
+
+	//Scale08
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MarsAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Planets_Mars.SM_Planets_Mars'"));
+	if (MarsAsset.Succeeded())
+	{
+		Scale08.Add(MercuryAsset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> VenusAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Planets_Venus.SM_Planets_Venus'"));
+	if (VenusAsset.Succeeded())
+	{
+		Scale08.Add(VenusAsset.Object);
+	}
+
+	//Scale09
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> NeptuneAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Planets_Neptune.SM_Planets_Neptune'"));
+	if (NeptuneAsset.Succeeded())
+	{
+		Scale09.Add(NeptuneAsset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> UranusAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Planets_Uranus.SM_Planets_Uranus'"));
+	if (UranusAsset.Succeeded())
+	{
+		Scale09.Add(UranusAsset.Object);
+	}
+
+	//Scale10
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SaturnAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Planets_Saturn.SM_Planets_Saturn'"));
+	if (SaturnAsset.Succeeded())
+	{
+		Scale10.Add(UranusAsset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> JupiterAsset(TEXT("StaticMesh'/Game/GameJam2022/Meshes/Suckable/SM_Planets_Jupiter.SM_Planets_Jupiter'"));
+	if (JupiterAsset.Succeeded())
+	{
+		Scale10.Add(JupiterAsset.Object);
 	}
 }
 
@@ -229,6 +314,27 @@ void ASpaceJunk::SetupObjectScale()
 			break;
 		case 7:
 			TempMesh = Scale07[FMath::RandRange(0, Scale07.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
+
+			break;
+		case 8:
+			TempMesh = Scale08[FMath::RandRange(0, Scale08.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
+
+			break;
+		case 9:
+			TempMesh = Scale09[FMath::RandRange(0, Scale09.Num() - 1)];
+			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
+			Mesh->SetStaticMesh(TempMesh);
+			Mesh->SetMaterial(0, TempMaterial);
+
+			break;
+		case 10:
+			TempMesh = Scale10[FMath::RandRange(0, Scale10.Num() - 1)];
 			TempMaterial = Cast<UMaterialInstance>(TempMesh->GetMaterial(0)->GetMaterial());
 			Mesh->SetStaticMesh(TempMesh);
 			Mesh->SetMaterial(0, TempMaterial);
