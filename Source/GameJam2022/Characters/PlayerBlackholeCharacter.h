@@ -36,6 +36,10 @@ private:
 	float DefaultScale;
 	void IncreaseScale(int NewObjectScale);
 
+	// ...
+
+	USoundBase* SlurpSound;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

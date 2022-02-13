@@ -347,6 +347,7 @@ void ASpaceJunk::UpdatePosition()
 			SetActorScale3D((FVector::OneVector * ObjectScale * .6f) - (FVector::OneVector * ((PC->GetObjectScale() - 1.5f) * 0.2f)));
 		}
 
+#if WITH_EDITOR
 		if (GEngine)
 		{
 			FString DebugMessage = TEXT("Gravity Ratio = ");
@@ -362,6 +363,7 @@ void ASpaceJunk::UpdatePosition()
 
 		SetActorLocation(FVector(LerpLocation.X, LerpLocation.Y, 0.f));
 	}
+#endif
 }
 
 void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -413,6 +415,7 @@ void ASpaceJunk::SetTravelPath(FVector WaypointDirection)
 {
 	TravelDirection = FVector(FVector(WaypointDirection - GetActorLocation()) * FVector(1.f, 1.f, 0.f)).GetClampedToSize(100.f, 100.f);
 
+#if WITH_EDITOR
 	if (GEngine)
 	{
 		FString DebugMessage = TEXT("New Travel Direction = ");
@@ -423,4 +426,5 @@ void ASpaceJunk::SetTravelPath(FVector WaypointDirection)
 		DebugMessage.AppendInt(INT(TravelDirection.Z));
 		GEngine->AddOnScreenDebugMessage(-1, 4.f, FColor::Yellow, DebugMessage);
 	}
+#endif
 }

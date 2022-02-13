@@ -15,6 +15,8 @@
 
 #include "Kismet/GameplayStatics.h"
 
+#include "Sound/SoundBase.h"
+
 // Sets default values
 APlayerBlackholeCharacter::APlayerBlackholeCharacter()
 {
@@ -37,7 +39,11 @@ APlayerBlackholeCharacter::APlayerBlackholeCharacter()
 	Camera->SetupAttachment(SpringArm);
 	Camera->SetFieldOfView(35.f);
 
-	
+	static ConstructorHelpers::FObjectFinder<USoundBase>SlurpSoundAsset(TEXT("SoundWave'/Game/GameJam2022/Audio/Slurp_WAV_.Slurp_WAV_'"));
+	if (SlurpSoundAsset.Succeeded())
+	{
+		SlurpSound = SlurpSoundAsset.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -114,6 +120,10 @@ void APlayerBlackholeCharacter::IncreaseScale(int NewObjectScale)
 void APlayerBlackholeCharacter::HandleCollection(ASpaceJunk* CollectedActor)
 {
 	if (!CollectedActor) { return; }
+
+	// ...
+
+	UGameplayStatics::PlaySound2D(GetWorld(), SlurpSound);
 
 	// ...
 
