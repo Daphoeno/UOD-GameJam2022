@@ -268,23 +268,6 @@ void ASpaceJunk::Tick(float DeltaTime)
 	UpdatePosition();
 
 	// ...
-
-	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
-	{
-		// ...
-
-		if (DynamicMaterial)
-		{
-			if (ObjectScale > PC->GetObjectScale())
-			{
-				DynamicMaterial->SetVectorParameterValue("FlashColor", FVector(1.0f, 0.f, 0.f));
-			}
-			else
-			{
-				DynamicMaterial->SetVectorParameterValue("FlashColor", FVector(0.f, 1.f, 0.f));
-			}
-		}
-	}
 }
 
 void ASpaceJunk::UpdatePosition()
@@ -318,6 +301,20 @@ void ASpaceJunk::UpdatePosition()
 
 	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 	{
+		if (DynamicMaterial)
+		{
+			if ((float)ObjectScale < PC->GetObjectScale())
+			{
+				DynamicMaterial->SetVectorParameterValue("FlashColor", FVector(0.f, 1.f, 0.f));
+				bIsTooBig = false;
+			}
+			else
+			{
+				DynamicMaterial->SetVectorParameterValue("FlashColor", FVector(1.f, 0.f, 0.f));
+				bIsTooBig = true;
+			}
+		}
+
 		float PlayerDistance = FMath::Abs(FVector::Dist(PC->GetActorLocation(), GetActorLocation()));
 		FVector PlayerDirection = FVector(PC->GetActorLocation() - GetActorLocation()).GetClampedToSize(100.f, 100.f);
 
@@ -377,10 +374,10 @@ void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 
 	if (APlayerBlackholeCharacter* PC = Cast<APlayerBlackholeCharacter>(OtherActor))
 	{
-		if (PC->GetObjectScale() <= ObjectScale) { PC->OnDeath(); return; }
-
 		if (Cast<UCapsuleComponent>(OtherComp))
 		{
+			if (bIsTooBig) { PC->OnDeath(); return; }
+
 			PC->HandleCollection(this);
 
 			if (ASpawnManager* SpawnManager = Cast<ASpawnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ASpawnManager::StaticClass())))

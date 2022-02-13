@@ -49,6 +49,10 @@ private:
 
 	// ...
 
+	bool bIsTooBig = false;
+
+	// ...
+
 	UMaterialInstanceDynamic* DynamicMaterial;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gravity", meta = (AllowPrivateAccess = "True"))
