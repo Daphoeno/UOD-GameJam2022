@@ -366,6 +366,10 @@ void ASpaceJunk::UpdatePosition()
 
 void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (!bIsActive) { return; }
+
+	// ...
+
 	if (!OtherActor) { return; }
 
 	if (!OtherComp) { return; }
@@ -376,7 +380,13 @@ void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	{
 		if (Cast<UCapsuleComponent>(OtherComp))
 		{
-			if (bIsTooBig) { PC->OnDeath(); return; }
+			if (bIsTooBig) { 
+				bIsActive = false; 
+				
+				PC->OnDeath(); 
+
+				return; 
+			}
 
 			PC->HandleCollection(this);
 
@@ -394,6 +404,7 @@ void ASpaceJunk::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 
 			DistanceTravelled = 0.f;
 
+			bIsActive = true;
 		}
 	}
 }

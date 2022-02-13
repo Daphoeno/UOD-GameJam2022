@@ -51,6 +51,8 @@ private:
 
 	bool bIsTooBig = false;
 
+	bool bIsActive = true;
+
 	// ...
 
 	UMaterialInstanceDynamic* DynamicMaterial;

@@ -42,7 +42,7 @@ bool ASpawnManager::HandleRespawn(ASpaceJunk* RespawnActor)
 
 	if (!SelectedSpawnMarker) { return false; }
 
-	RespawnActor->SetActorLocation(SelectedSpawnMarker->GetActorLocation());
+	RespawnActor->SetActorLocation(SelectedSpawnMarker->GetActorLocation(), false);
 
 	// ...
 
